@@ -1,15 +1,19 @@
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
+
 dotenv.config();
 
-const mongoClient = new MongoClient(process.env.MONGO_URI);
+const conectarBanco = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    console.log("Conexão com o MongoDB estabelecida.");
+  } catch (error) {
+    console.error("Erro de conexão com o MongoDB:", error);
+    throw error;
+  }
+};
 
-try {
-  await mongoClient.connect();
-} catch (err) {
-  console.log(err);
-}
-
-export const db = mongoClient.db("ellp");
-export const userCollection = db.collection("users");
-export const sessionsCollection = db.collection("sessions");
+export default conectarBanco;
