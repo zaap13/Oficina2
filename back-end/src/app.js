@@ -14,47 +14,9 @@ app.use(bodyParser.json());
 conectarBanco();
 
 app.use("/alunos", alunoRouter);
-
-app.post("/professores", async (req, res) => {
-  try {
-    const professor = new Professor(req.body);
-    await professor.save();
-    res.status(201).send(professor);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
-
-app.post("/coordenadores", async (req, res) => {
-  try {
-    const coordenador = new Coordenador(req.body);
-    await coordenador.save();
-    res.status(201).send(coordenador);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
-
-app.post("/login", async (req, res) => {
-  const { nomeUsuario, senha } = req.body;
-  try {
-    // Verificar se o usuário existe
-    const usuario = await Usuario.findOne({ nomeUsuario, senha });
-    if (!usuario) {
-      return res
-        .status(401)
-        .json({ mensagem: "Nome de usuário ou senha incorretos." });
-    }
-    const token = jwt.sign(
-      { nomeUsuario: usuario.nomeUsuario, tipo: usuario.tipo },
-      process.env.JWT_SECRET
-    );
-    res.json({ token });
-  } catch (error) {
-    console.error("Erro ao fazer login:", error);
-    res.status(500).json({ mensagem: "Erro interno do servidor." });
-  }
-});
+app.use("/professores", professorRouter);
+app.use("/coordenadores", coordenadorRouter);
+app.use("/usuarios", usuarioRouter);
 
 function verificarToken(req, res, next) {
   const token = req.headers.authorization;
