@@ -1,8 +1,8 @@
 import express from "express";
-import { criarAluno } from "../controllers/alunoController.js";
+import { criarCoordenador } from "../controllers/coordenadorController";
 
-const alunoRouter = express.Router();
+const coordenadorRouter = express.Router();
 
-alunoRouter.post("/", criarAluno);
+coordenadorRouter.post("/", criarCoordenador);
 
-export default alunoRouter;
+export default coordenadorRouter;
