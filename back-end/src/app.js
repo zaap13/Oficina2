@@ -4,6 +4,10 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import jwt from "jsonwebtoken";
 import conectarBanco from "./database/db.js";
+import alunoRouter from "./routes/alunoRouter.js";
+import professorRouter from "./routes/professorRouter.js";
+import coordenadorRouter from "./routes/coordenadorRouter.js";
+import usuarioRouter from "./routes/usuarioRouter.js";
 
 dotenv.config();
 
