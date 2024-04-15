@@ -1,4 +1,4 @@
-import { criarAluno } from "../repositories/alunoRepository";
+import { criarAluno } from "../repositories/alunoRepository.js";
 
 async function criarNovoAluno(data) {
   try {

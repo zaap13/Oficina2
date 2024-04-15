@@ -1,5 +1,5 @@
 import express from "express";
-import { criarAluno } from "../controllers/alunoController";
+import { criarAluno } from "../controllers/alunoController.js";
 
 const alunoRouter = express.Router();
 

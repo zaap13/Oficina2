@@ -1,4 +1,4 @@
-import { criarNovoAluno } from "../services/alunoService";
+import { criarNovoAluno } from "../services/alunoService.js";
 
 async function criarAluno(req, res) {
   try {

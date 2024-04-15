@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import jwt from "jsonwebtoken";
-import conectarBanco from "./database/db";
+import conectarBanco from "./database/db.js";
 
 dotenv.config();
 
