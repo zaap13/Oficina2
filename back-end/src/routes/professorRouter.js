@@ -1,8 +1,8 @@
 import express from "express";
-import { criarAluno } from "../controllers/alunoController.js";
+import { criarProfessor } from "../controllers/professorController";
 
-const alunoRouter = express.Router();
+const professorRouter = express.Router();
 
-alunoRouter.post("/", criarAluno);
+professorRouter.post("/", criarProfessor);
 
-export default alunoRouter;
+export default professorRouter;
