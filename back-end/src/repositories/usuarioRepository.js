@@ -1,7 +1,7 @@
-import Aluno from "../models/alunoModel.js";
+import Usuario from "../models/usuarioModel";
 
-async function criarAluno(data) {
-  return await Aluno.create(data);
+async function criarUsuario(data) {
+  return await Usuario.create(data);
 }
 
-export { criarAluno };
+export { criarUsuario };
