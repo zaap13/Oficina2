@@ -1,7 +1,7 @@
-import Aluno from "../models/alunoModel.js";
+import Coordenador from "../models/coordenadorModel";
 
-async function criarAluno(data) {
-  return await Aluno.create(data);
+async function criarCoordenador(data) {
+  return await Coordenador.create(data);
 }
 
-export { criarAluno };
+export { criarCoordenador };
