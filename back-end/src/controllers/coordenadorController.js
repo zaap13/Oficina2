@@ -1,4 +1,4 @@
-import { criarNovoCoordenador } from "../services/coordenadorService,js";
+import { criarNovoCoordenador } from "../services/coordenadorService.js";
 
 async function criarCoordenador(req, res) {
   try {

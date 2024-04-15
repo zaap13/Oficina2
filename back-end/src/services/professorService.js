@@ -1,4 +1,4 @@
-import { criarProfessor } from "../repositories/professorRepository";
+import { criarProfessor } from "../repositories/professorRepository.js";
 
 async function criarNovoProfessor(data) {
   try {

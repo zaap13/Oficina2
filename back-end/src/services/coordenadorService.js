@@ -1,4 +1,4 @@
-import { criarCoordenador } from "../repositories/coordernadorRepository";
+import { criarCoordenador } from "../repositories/coordenadorRepository.js";
 
 async function criarNovoCoordenador(data) {
   try {

@@ -1,4 +1,4 @@
-import { criarNovoProfessor } from "../services/professorService";
+import { criarNovoProfessor } from "../services/professorService.js";
 
 async function criarProfessor(req, res) {
   try {

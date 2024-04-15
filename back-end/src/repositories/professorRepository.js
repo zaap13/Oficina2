@@ -1,4 +1,4 @@
-import Professor from "../models/professorModel";
+import Professor from "../models/professorModel.js";
 
 async function criarProfessor(data) {
   return await Professor.create(data);

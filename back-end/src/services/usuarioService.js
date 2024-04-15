@@ -1,4 +1,4 @@
-import { criarUsuario } from "../repositories/usuarioRepository";
+import { criarUsuario } from "../repositories/usuarioRepository.js";
 
 async function criarNovoUsuario(data) {
   try {
