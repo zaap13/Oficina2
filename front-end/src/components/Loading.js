@@ -9,7 +9,7 @@ const Loading = () => {
       style={{
         shapeRendering: "auto",
         display: "block",
-        background: "rgb(255, 255, 255)",
+        background: "transparent",
       }}
       xmlnsXlink="http://www.w3.org/1999/xlink">
       <g>
