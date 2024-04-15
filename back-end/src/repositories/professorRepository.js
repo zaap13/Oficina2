@@ -1,7 +1,7 @@
-import Aluno from "../models/alunoModel.js";
+import Professor from "../models/professorModel";
 
-async function criarAluno(data) {
-  return await Aluno.create(data);
+async function criarProfessor(data) {
+  return await Professor.create(data);
 }
 
-export { criarAluno };
+export { criarProfessor };
