@@ -1,12 +1,12 @@
-import { criarNovoAluno } from "../services/alunoService.js";
+import { criarNovoProfessor } from "../services/professorService";
 
-async function criarAluno(req, res) {
+async function criarProfessor(req, res) {
   try {
-    const aluno = await criarNovoAluno(req.body);
-    res.status(201).send(aluno);
+    const professor = await criarNovoProfessor(req.body);
+    res.status(201).send(professor);
   } catch (error) {
     res.status(400).send(error.message);
   }
 }
 
-export { criarAluno };
+export { criarProfessor };
