@@ -1,11 +1,11 @@
-import { criarAluno } from "../repositories/alunoRepository.js";
+import { criarProfessor } from "../repositories/professorRepository";
 
-async function criarNovoAluno(data) {
+async function criarNovoProfessor(data) {
   try {
-    return await criarAluno(data);
+    return await criarProfessor(data);
   } catch (error) {
-    throw new Error("Erro ao criar aluno no banco de dados.");
+    throw new Error("Erro ao criar professor no banco de dados.");
   }
 }
 
-export { criarNovoAluno };
+export { criarNovoProfessor };
