@@ -1,11 +1,11 @@
-import { criarAluno } from "../repositories/alunoRepository.js";
+import { criarCoordenador } from "../repositories/coordernadorRepository";
 
-async function criarNovoAluno(data) {
+async function criarNovoCoordenador(data) {
   try {
-    return await criarAluno(data);
+    return await criarCoordenador(data);
   } catch (error) {
-    throw new Error("Erro ao criar aluno no banco de dados.");
+    throw new Error("Erro ao criar coordenador no banco de dados.");
   }
 }
 
-export { criarNovoAluno };
+export { criarNovoCoordenador };
