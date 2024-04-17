@@ -22,7 +22,7 @@ const Home = () => {
         </h1>
         <div className="flex flex-col w-full items-end justify-center gap-4">
           <Link href="/sign" className="w-full flex items-center justify-center">
-            <Button className="w-full bg-white text-neutral-900">Solicitar acesso</Button>
+            <Button className="w-full">Solicitar acesso</Button>
           </Link>
           <Link href="/login" className="w-full flex items-center justify-center">
             <Button className="w-full bg-neutral-900 text-white border border-gray-700">Login</Button>
