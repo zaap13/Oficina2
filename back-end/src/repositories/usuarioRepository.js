@@ -4,8 +4,8 @@ async function buscarUsuarioPorEmail(email) {
   return await Usuario.findOne({ email });
 }
 
-async function criarUsuario(nome, email, senha) {
-  const usuario = new Usuario({ nome, email, senha });
+async function criarUsuario(nome, email, senha, tipo) {
+  const usuario = new Usuario({ nome, email, senha, tipo });
   return await usuario.save();
 }
 
