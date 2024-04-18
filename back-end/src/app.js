@@ -20,4 +20,4 @@ app.use("/login", loginRouter);
 app.get("/health", (_req, res) => res.send("OK!"));
 
 const port = process.env.PORT || 4000;
-app.listen(port, () => console.log("Servidor rodando na porta 5000"));
+app.listen(port, () => console.log("Servidor rodando na porta 4000"));
