@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../app';
+import app from '../../src/app.js';
 
 describe('Teste do controlador de usuários', () => {
   it('Deve criar um novo usuário', async () => {
