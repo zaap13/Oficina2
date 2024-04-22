@@ -4,6 +4,7 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import ellp from "../../../public/ellp5.jpg";
 import { useState } from "react";
+import { login } from "@/services/apiService";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -13,21 +14,14 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/login`,
-        {
-          email,
-          senha,
-        }
-      );
-
+      const response = await login(email, senha);
       const token = response.data.token;
       localStorage.setItem("token", token);
 
       console.log("Token de acesso:", token);
       // Redirecionar/Boas Vindas
     } catch (error) {
-      console.error("Erro ao fazer login:", error.response.data);
+      console.error("Erro ao fazer login:", error);
       // Tratar erros de login, exibir mensagem para o usuário, etc.
     }
   };
@@ -55,8 +49,7 @@ const LoginPage = () => {
 
         <form
           onSubmit={handleLoginSubmit}
-          className="flex flex-col items-center gap-4 w-full"
-        >
+          className="flex flex-col items-center gap-4 w-full">
           <Input
             type="email"
             autoComplete="username"
@@ -79,8 +72,7 @@ const LoginPage = () => {
           <div className="w-full flex items-center justify-center">
             <Button
               type="submit"
-              className="w-full bg-blue-500 text-white mt-4"
-            >
+              className="w-full bg-blue-500 text-white mt-4">
               Login
             </Button>
           </div>

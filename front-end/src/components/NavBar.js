@@ -1,8 +1,22 @@
 "use client";
+import { getDecodedToken } from "@/helpers/authHelper";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const NavBar = () => {
+  const [isClient, setIsClient] = useState(false);
+  const [userType, setUserType] = useState(null);
+
+  useEffect(() => {
+    setIsClient(true);
+    const decodedToken = getDecodedToken();
+    if (decodedToken) {
+      const userType = decodedToken.tipo;
+      setUserType(userType);
+    }
+  }, []);
+
   return (
     <header className="w-full bg-blue-500 text-white px-4 py-2 flex items-center justify-between">
       <div>
@@ -11,9 +25,20 @@ const NavBar = () => {
         </Link>
       </div>
       <nav className="space-x-4">
-        <NavLink href="/workshops" title="Workshops" />
-        <NavLink href="/certificados" title="Meus Certificados" />
-        <NavLink href="/login" title="Login" />
+        {isClient && userType === "admin" && (
+          <>
+            <NavLink href="/cadastrar-aluno" title="Cadastrar Aluno" />
+            <NavLink href="/assinar-certificado" title="Assinar Certificado" />
+          </>
+        )}
+        {isClient && userType === "aluno" && (
+          <>
+            <NavLink href="/workshops" title="Workshops" />
+            <NavLink href="/meus-certificados" title="Meus Certificados" />
+          </>
+        )}
+        {isClient && userType && <NavLink href="/perfil" title="Perfil" />}
+        {isClient && !userType && <NavLink href="/login" title="Login" />}
       </nav>
     </header>
   );
