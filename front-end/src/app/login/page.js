@@ -5,29 +5,33 @@ import Input from "@/components/Input";
 import ellp from "../../../public/ellp5.jpg";
 import { useState } from "react";
 import { login } from "@/services/apiService";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { getDecodedToken } from "@/helpers/authHelper";
 
 const LoginPage = () => {
+  const { dispatch } = useAuth();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const router = useRouter();
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await login(email, senha);
-      const token = response.data.token;
+      console.log("response", response);
+      const token = response.token;
       localStorage.setItem("token", token);
+      const decodedToken = getDecodedToken();
+      const userType = decodedToken ? decodedToken.tipo : null;
 
-      console.log("Token de acesso:", token);
-      // Redirecionar/Boas Vindas
+      dispatch({ type: "LOGIN", payload: { userType } });
+      router.push("/");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       // Tratar erros de login, exibir mensagem para o usuário, etc.
     }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
   };
 
   return (

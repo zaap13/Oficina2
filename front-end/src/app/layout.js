@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/contexts/AuthContext";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import "./globals.css";
@@ -16,13 +17,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
       <body className={montserrat.className}>
-        <main
-          className={`${montserrat.variable} font-mont bg-light w-full min-h-screen`}
-        >
-          <NavBar />
-          {children}
-          <Footer />
-        </main>
+        <AuthProvider>
+          <main
+            className={`${montserrat.variable} font-mont bg-light w-full min-h-screen`}>
+            <NavBar />
+            {children}
+            <Footer />
+          </main>
+        </AuthProvider>
       </body>
     </html>
   );

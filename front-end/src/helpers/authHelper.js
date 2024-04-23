@@ -4,7 +4,7 @@ const getTokenFromLocalStorage = () => {
   return localStorage.getItem("token");
 };
 
-const getDecodedToken = () => {
+export const getDecodedToken = () => {
   const token = getTokenFromLocalStorage();
   if (token) {
     try {
@@ -18,4 +18,6 @@ const getDecodedToken = () => {
   return null;
 };
 
-export { getDecodedToken };
+export const handleLogout = () => {
+  localStorage.removeItem("token");
+};
