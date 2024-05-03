@@ -4,36 +4,34 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import ellp from "../../../public/ellp5.jpg";
 import { useState } from "react";
+import { login } from "@/services/apiService";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { getDecodedToken } from "@/helpers/authHelper";
 
 const LoginPage = () => {
+  const { dispatch } = useAuth();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const router = useRouter();
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/login`,
-        {
-          email,
-          senha,
-        }
-      );
-
-      const token = response.data.token;
+      const response = await login(email, senha);
+      console.log("response", response);
+      const token = response.token;
       localStorage.setItem("token", token);
+      const decodedToken = getDecodedToken();
+      const userType = decodedToken ? decodedToken.tipo : null;
 
-      console.log("Token de acesso:", token);
-      // Redirecionar/Boas Vindas
+      dispatch({ type: "LOGIN", payload: { userType } });
+      router.push("/");
     } catch (error) {
-      console.error("Erro ao fazer login:", error.response.data);
+      console.error("Erro ao fazer login:", error);
       // Tratar erros de login, exibir mensagem para o usuário, etc.
     }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
   };
 
   return (
@@ -55,8 +53,7 @@ const LoginPage = () => {
 
         <form
           onSubmit={handleLoginSubmit}
-          className="flex flex-col items-center gap-4 w-full"
-        >
+          className="flex flex-col items-center gap-4 w-full">
           <Input
             type="email"
             autoComplete="username"
@@ -79,8 +76,7 @@ const LoginPage = () => {
           <div className="w-full flex items-center justify-center">
             <Button
               type="submit"
-              className="w-full bg-blue-500 text-white mt-4"
-            >
+              className="w-full bg-blue-500 text-white mt-4">
               Login
             </Button>
           </div>
