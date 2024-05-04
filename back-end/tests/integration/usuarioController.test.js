@@ -22,4 +22,54 @@ describe('Teste do controlador de usuários', () => {
     expect(response.body).toHaveProperty('mensagem', 'Usuário cadastrado com sucesso');
     expect(response.body).toHaveProperty('senha');
   });
+
+  it('Deve retornar um erro ao criar um usuário com e-mail duplicado', async () => {
+    const novoUsuario = {
+      nome: 'Bob',
+      email: 'bob@example.com',
+      tipo: 'coordenador'
+    };
+
+    // Cria um usuário com o mesmo e-mail antes de tentar criar o segundo
+    await request(app)
+      .post('/usuarios')
+      .send(novoUsuario);
+
+    // Tenta criar outro usuário com o mesmo e-mail
+    const response = await request(app)
+      .post('/usuarios')
+      .send(novoUsuario);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('mensagem', 'E-mail já cadastrado');
+  });
+
+  it('Deve retornar um erro ao criar um usuário sem nome', async () => {
+    const novoUsuario = {
+      email: 'carol@example.com',
+      tipo: 'coordenador'
+    };
+
+    const response = await request(app)
+      .post('/usuarios')
+      .send(novoUsuario);
+
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty('mensagem', 'Nome é obrigatório');
+  });
+
+  it('Deve retornar um erro ao criar um usuário com tipo inválido', async () => {
+    const novoUsuario = {
+      nome: 'David',
+      email: 'david@example.com',
+      tipo: 'invalido'
+    };
+
+    const response = await request(app)
+      .post('/usuarios')
+      .send(novoUsuario);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('mensagem', 'Tipo de usuário inválido');
+  });
 });
