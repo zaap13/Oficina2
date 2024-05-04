@@ -35,7 +35,7 @@ describe('Teste do controlador de usuários', () => {
       .post('/usuarios')
       .send(novoUsuario);
 
-    // Tenta criar outro usuário com o mesmo e-mail
+    // Tenta criar outro usuário com o mesmo email
     const response = await request(app)
       .post('/usuarios')
       .send(novoUsuario);
