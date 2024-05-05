@@ -35,7 +35,7 @@ const NavBar = () => {
     if (result.isConfirmed) {
       handleLogout();
       dispatch({ type: "LOGOUT" });
-      router.refresh();
+      router.push('/');
     }
   };
 

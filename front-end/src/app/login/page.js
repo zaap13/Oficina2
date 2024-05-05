@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
-import Button from "@/components/Button";
-import Input from "@/components/Input";
+import Button from "@/components/Button.js";
+import Input from "@/components/Input.js";
 import ellp from "../../../public/ellp5.jpg";
 import { useState } from "react";
-import { login } from "@/services/apiService";
+import { login } from "@/services/apiService.js";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
-import { getDecodedToken } from "@/helpers/authHelper";
+import { useAuth } from "@/contexts/AuthContext.js";
+import { getDecodedToken } from "@/helpers/authHelper.js";
 
 const LoginPage = () => {
   const { dispatch } = useAuth();
