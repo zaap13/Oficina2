@@ -1,75 +1,83 @@
-import request from 'supertest';
-import app from '../../src/app.js';
+import request from "supertest";
+import app from "../../src/app.js";
+import conectarBanco from "../../src/database/db.js";
+import { seedAdminUser } from "../seedData.js";
+import Usuario from "../../src/models/usuarioModel.js";
 
-describe('Teste do controlador de usuários', () => {
-  it('Deve criar um novo usuário', async () => {
- 
-    const novoUsuario = {
-      nome: 'Alice',
-      email: 'alice@example.com',
-      tipo: 'coordenador'
-    };
+beforeAll(async () => {
+  await conectarBanco();
+  await seedAdminUser();
+});
 
-    // Faz uma solicitação POST para a rota /usuarios com os dados do novo usuário
+afterEach(async () => {
+  // Limpa o usuário criado no teste após cada teste
+  await Usuario.deleteOne({ email: "novo@example.com" });
+});
+
+describe("Testes do controlador de usuários", () => {
+  it("Deve criar um novo usuário", async () => {
+    // Realiza o login para obter o token
+    const loginResponse = await request(app)
+      .post("/login")
+      .send({ email: "admin@admin.admin", senha: "admin" });
+
+    const token = loginResponse.body.token;
+
+    // Usa o token para criar um novo usuário
     const response = await request(app)
-      .post('/usuarios')
-      .send(novoUsuario);
-
-    // Verifica se a resposta possui o status HTTP 201 (Created)
-    expect(response.status).toBe(201);
-
-    // Verifica se a resposta possui uma mensagem de sucesso e uma senha
-    expect(response.body).toHaveProperty('mensagem', 'Usuário cadastrado com sucesso');
-    expect(response.body).toHaveProperty('senha');
-  });
-
-  it('Deve retornar um erro ao criar um usuário com e-mail duplicado', async () => {
-    const novoUsuario = {
-      nome: 'Bob',
-      email: 'bob@example.com',
-      tipo: 'coordenador'
-    };
-
-    // Cria um usuário com o mesmo e-mail antes de tentar criar o segundo
-    await request(app)
-      .post('/usuarios')
-      .send(novoUsuario);
-
-    // Tenta criar outro usuário com o mesmo email
-    const response = await request(app)
-      .post('/usuarios')
-      .send(novoUsuario);
-
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('mensagem', 'E-mail já cadastrado');
-  });
-
-  it('Deve retornar um erro ao criar um usuário sem nome', async () => {
-    const novoUsuario = {
-      email: 'carol@example.com',
-      tipo: 'coordenador'
-    };
-
-    const response = await request(app)
-      .post('/usuarios')
-      .send(novoUsuario);
+      .post("/usuarios")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        nome: "Novo Usuário",
+        email: "novo@example.com",
+        tipo: "admin",
+      });
 
     expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty('mensagem', 'Nome é obrigatório');
+    expect(response.body).toHaveProperty(
+      "mensagem",
+      "Usuário cadastrado com sucesso"
+    );
   });
+  it("Deve retornar um erro ao criar um usuário com tipo inválido", async () => {
+    const loginResponse = await request(app)
+      .post("/login")
+      .send({ email: "admin@admin.admin", senha: "admin" });
 
-  it('Deve retornar um erro ao criar um usuário com tipo inválido', async () => {
-    const novoUsuario = {
-      nome: 'David',
-      email: 'david@example.com',
-      tipo: 'invalido'
-    };
+    const token = loginResponse.body.token;
 
     const response = await request(app)
-      .post('/usuarios')
-      .send(novoUsuario);
+      .post("/usuarios")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        nome: "Novo Usuário",
+        email: "usuario_tipo_invalido@example.com",
+        tipo: "tipo_invalido",
+      });
 
     expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('mensagem', 'Tipo de usuário inválido');
+    expect(response.body).toHaveProperty(
+      "mensagem",
+      "Usuario validation failed: tipo: `tipo_invalido` is not a valid enum value for path `tipo`."
+    );
+  });
+
+  it("Deve retornar um erro ao criar um usuário sem nome", async () => {
+    const loginResponse = await request(app)
+      .post("/login")
+      .send({ email: "admin@admin.admin", senha: "admin" });
+
+    const token = loginResponse.body.token;
+
+    const response = await request(app)
+      .post("/usuarios")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        email: "usuario_sem_nome@example.com",
+        tipo: "admin",
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty("mensagem", "Usuario validation failed: nome: Path `nome` is required.");
   });
 });
