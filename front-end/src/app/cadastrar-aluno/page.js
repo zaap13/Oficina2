@@ -1,9 +1,10 @@
-"use client"
+"use client";
 import { useState } from 'react';
 import Button from '@/components/Button.js';
 import Input from '@/components/Input.js';
 import { useRouter } from 'next/navigation';
 import { register } from '@/services/apiService.js';
+import Swal from 'sweetalert2';
 
 const RegisterPage = () => {
   const [nome, setNome] = useState('');
@@ -17,12 +18,15 @@ const RegisterPage = () => {
 
     try {
       const response = await register({ nome, email, tipo });
-      console.log('response', response);
       const senha = response.senha;
       setSenhaGerada(senha);
     } catch (error) {
       console.error('Erro ao cadastrar:', error);
-      // Tratar erros de cadastro, exibir mensagem para o usuário, etc.
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro ao cadastrar',
+        text: 'Ocorreu um erro ao tentar cadastrar o usuário. Por favor, tente novamente.',
+      });
     }
   };
 
@@ -36,7 +40,9 @@ const RegisterPage = () => {
         <form
           onSubmit={handleRegisterSubmit}
           className="flex flex-col items-center gap-4 w-full">
+          <label htmlFor="nome" className="text-white">Nome</label>
           <Input
+            id="nome"
             type="text"
             placeholder="Nome"
             required
@@ -45,7 +51,9 @@ const RegisterPage = () => {
             onChange={(e) => setNome(e.target.value)}
           />
 
+          <label htmlFor="email" className="text-white">E-mail</label>
           <Input
+            id="email"
             type="email"
             autoComplete="username"
             placeholder="E-mail"
@@ -55,9 +63,11 @@ const RegisterPage = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
 
+          <label htmlFor="tipo" className="text-white">Tipo (admin/aluno)</label>
           <Input
+            id="tipo"
             type="text"
-            placeholder="Tipo (admin/aluno)"
+            placeholder="Tipo"
             required
             className="w-full"
             value={tipo}

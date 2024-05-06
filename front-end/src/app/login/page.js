@@ -8,6 +8,7 @@ import { login } from "@/services/apiService.js";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext.js";
 import { getDecodedToken } from "@/helpers/authHelper.js";
+import Swal from "sweetalert2";
 
 const LoginPage = () => {
   const { dispatch } = useAuth();
@@ -20,7 +21,6 @@ const LoginPage = () => {
 
     try {
       const response = await login(email, senha);
-      console.log("response", response);
       const token = response.token;
       localStorage.setItem("token", token);
       const decodedToken = getDecodedToken();
@@ -30,7 +30,11 @@ const LoginPage = () => {
       router.push("/");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
-      // Tratar erros de login, exibir mensagem para o usuário, etc.
+      Swal.fire({
+        icon: "error",
+        title: "Erro ao fazer login",
+        text: "Verifique suas credenciais e tente novamente.",
+      });
     }
   };
 
@@ -53,11 +57,13 @@ const LoginPage = () => {
 
         <form
           onSubmit={handleLoginSubmit}
-          className="flex flex-col items-center gap-4 w-full">
+          className="flex flex-col items-center gap-4 w-full"
+        >
           <Input
             type="email"
             autoComplete="username"
             placeholder="E-mail"
+            aria-label="E-mail"
             required
             className="w-full"
             value={email}
@@ -67,6 +73,7 @@ const LoginPage = () => {
           <Input
             type="password"
             placeholder="Senha"
+            aria-label="Senha"
             required
             className="w-full"
             value={senha}
@@ -76,7 +83,8 @@ const LoginPage = () => {
           <div className="w-full flex items-center justify-center">
             <Button
               type="submit"
-              className="w-full bg-blue-500 text-white mt-4">
+              className="w-full bg-blue-500 text-white mt-4"
+            >
               Login
             </Button>
           </div>
