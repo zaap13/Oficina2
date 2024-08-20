@@ -1,4 +1,4 @@
-import { inscreverAlunoNoWorkshop, listarAlunosPorWorkshop } from "../services/alunoWorkshopService.js";
+import { inscreverAlunoNoWorkshop } from "../services/inscricoesService.js";
 
 async function inscreverAluno(req, res) {
   try {
@@ -13,7 +13,7 @@ async function inscreverAluno(req, res) {
 async function listarAlunosPorWorkshopId(req, res) {
   try {
     const { workshopId } = req.params;
-    const alunos = await listarAlunosPorWorkshop(workshopId);
+    const alunos = await listarAlunosPorWorkshopId(workshopId);
     res.status(200).json(alunos);
   } catch (error) {
     res.status(500).json({ mensagem: "Erro ao listar alunos do workshop" });

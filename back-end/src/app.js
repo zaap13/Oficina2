@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import conectarBanco from "./database/db.js";
 import usuarioRouter from "./routers/usuarioRouter.js";
 import loginRouter from "./routers/loginRouter.js";
+import workshopRouter from "./routers/workshopRouter.js";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ conectarBanco();
 
 app.use("/usuarios", usuarioRouter);
 app.use("/login", loginRouter);
+app.use("/workshops", workshopRouter);
 
 app.get("/health", (_req, res) => res.send("OK!"));
 

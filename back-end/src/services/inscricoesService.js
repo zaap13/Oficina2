@@ -1,4 +1,4 @@
-import { inscreverAluno, buscarInscricaoPorAlunoEWorkshop } from "../repositories/inscricaoRepository.js";
+import { buscarInscricaoPorAlunoEWorkshop, inscreverAluno } from "../repositories/inscricoesRepository.js";
 
 async function inscreverAlunoNoWorkshop({ alunoId, workshopId }) {
   const inscricaoExistente = await buscarInscricaoPorAlunoEWorkshop(alunoId, workshopId);
