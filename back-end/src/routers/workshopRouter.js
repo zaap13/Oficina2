@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  buscarWorkshopPorId,
   criarNovoWorkshop,
   listarTodosWorkshops,
 } from "../controllers/workshopController.js";
@@ -15,8 +16,10 @@ workshopRouter.get("/", listarTodosWorkshops);
 
 workshopRouter.post("/", verificarToken, verificarAdmin, criarNovoWorkshop);
 
-workshopRouter.post("/inscrever", verificarToken, inscreverAluno);
+workshopRouter.post("/:workshopId/inscrever", verificarToken, inscreverAluno);
 
 workshopRouter.get("/:workshopId/alunos", verificarToken, listarAlunosPorWorkshopId);
+
+workshopRouter.get("/:id", verificarToken, buscarWorkshopPorId);
 
 export default workshopRouter;

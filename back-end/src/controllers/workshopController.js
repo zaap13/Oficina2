@@ -1,4 +1,5 @@
 import {
+  buscarWorkshop,
   criarWorkshopService,
   listarTodosWorkshopsService,
 } from "../services/workshopService.js";
@@ -22,4 +23,17 @@ async function listarTodosWorkshops(req, res) {
   }
 }
 
-export { criarNovoWorkshop, listarTodosWorkshops };
+async function buscarWorkshopPorId(req, res) {
+  try {
+    const { id } = req.params;
+    const workshop = await buscarWorkshop(id);
+    if (!workshop) {
+      return res.status(404).json({ mensagem: "Workshop não encontrado" });
+    }
+    res.status(200).json(workshop);
+  } catch (error) {
+    res.status(500).json({ mensagem: "Erro ao buscar workshop" });
+  }
+}
+
+export { criarNovoWorkshop, listarTodosWorkshops, buscarWorkshopPorId };

@@ -1,10 +1,15 @@
-import { criarWorkshop, buscarWorkshopPorId, listarWorkshops } from "../repositories/workshopRepository.js";
+import {
+  criarWorkshop,
+  buscarWorkshopPorId,
+  listarWorkshops,
+} from "../repositories/workshopRepository.js";
 
 async function criarWorkshopService({ titulo, descricao, data }) {
   return await criarWorkshop({ titulo, descricao, data });
 }
 
 async function buscarWorkshop(id) {
+  console.log(id);
   return await buscarWorkshopPorId(id);
 }
 

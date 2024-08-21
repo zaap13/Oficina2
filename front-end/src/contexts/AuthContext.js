@@ -5,6 +5,7 @@ import { getDecodedToken } from "@/helpers/authHelper";
 const initialState = {
   isAuthenticated: false,
   userType: null,
+  userId: null, // Incluímos userId no estado inicial
 };
 
 const AuthActionTypes = {
@@ -15,10 +16,10 @@ const AuthActionTypes = {
 const authReducer = (state, action) => {
   switch (action.type) {
     case AuthActionTypes.LOGIN:
-      const userType = action.payload?.userType || state.userType; // Prioriza o userType do payload, se disponível
-      return { isAuthenticated: true, userType };
+      const { userType, userId } = action.payload || {};
+      return { isAuthenticated: true, userType, userId };
     case AuthActionTypes.LOGOUT:
-      return { isAuthenticated: false, userType: null };
+      return { isAuthenticated: false, userType: null, userId: null };
     default:
       return state;
   }
@@ -28,11 +29,14 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+
   React.useEffect(() => {
     const decodedToken = getDecodedToken();
     if (decodedToken) {
       const userType = decodedToken.tipo;
-      dispatch({ type: AuthActionTypes.LOGIN, payload: { userType } });
+      const userId = decodedToken.id; // Usamos o ID incluído no token
+      console.log("UserId from Token:", userId); // Adicione este log para depuração
+      dispatch({ type: AuthActionTypes.LOGIN, payload: { userType, userId } });
     }
   }, []);
 

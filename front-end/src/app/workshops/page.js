@@ -16,13 +16,14 @@ const WorkshopsPage = () => {
   const [selectedWorkshop, setSelectedWorkshop] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { state } = useAuth();
+  console.log("STATE", state);
 
   useEffect(() => {
     const fetchWorkshops = async () => {
       try {
         setIsLoading(true);
         const data = await listarWorkshops();
-        console.log("Workshops recebidos:", data); // Adicione este log
+        console.log("Workshops recebidos:", data);
         setWorkshops(data);
         setIsLoading(false);
       } catch (error) {
@@ -45,7 +46,9 @@ const WorkshopsPage = () => {
 
   const handleInscrever = async () => {
     try {
-      await inscreverEmWorkshop(selectedWorkshop._id, state.user._id);
+      console.log("Workshop ID:", selectedWorkshop._id);
+
+      await inscreverEmWorkshop(selectedWorkshop._id);
       Swal.fire({
         icon: "success",
         title: "Inscrição realizada com sucesso",

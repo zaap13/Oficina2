@@ -16,19 +16,24 @@ const listarWorkshops = async () => {
 
 const buscarWorkshop = async (id) => {
   try {
-    const response = await apiService.get(`/workshops/${id}`);
+    const token = getTokenFromLocalStorage();
+    const response = await apiService.get(`/workshops/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-const inscreverEmWorkshop = async (workshopId, userId) => {
+const inscreverEmWorkshop = async (workshopId) => {
   try {
     const token = getTokenFromLocalStorage();
     const response = await apiService.post(
-      `/workshops/${workshopId}/inscrever`,
-      { userId },
+      `/workshops/${workshopId}/inscrever`, 
+      {},
       {
         headers: {
           Authorization: `Bearer ${token}`,
