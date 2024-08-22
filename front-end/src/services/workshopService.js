@@ -64,9 +64,58 @@ const desinscreverDoWorkshop = async (workshopId) => {
   }
 };
 
+const criarWorkshop = async (dados) => {
+  try {
+    const token = getTokenFromLocalStorage();
+    const response = await apiService.post("/workshops", dados, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.workshop;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const editarWorkshop = async (workshopId, dadosAtualizados) => {
+  try {
+    const token = getTokenFromLocalStorage();
+    const response = await apiService.put(
+      `/workshops/${workshopId}`,
+      dadosAtualizados,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data.workshopAtualizado;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deletarWorkshop = async (workshopId) => {
+  try {
+    const token = getTokenFromLocalStorage();
+    const response = await apiService.delete(`/workshops/${workshopId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   listarWorkshops,
   buscarWorkshop,
   inscreverEmWorkshop,
   desinscreverDoWorkshop,
+  criarWorkshop,
+  editarWorkshop,
+  deletarWorkshop,
 };

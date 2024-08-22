@@ -55,7 +55,7 @@ const NavBar = () => {
         {state.userType === "admin" && state.isAuthenticated && (
           <>
             <NavLink href="/cadastrar-aluno" title="Cadastrar Aluno" />
-            <NavLink href="/assinar-certificado" title="Assinar Certificado" />
+            <NavLink href="/gerenciar-workshop" title="Gerenciar Workshops" />
           </>
         )}
         {state.userType === "aluno" && state.isAuthenticated && (

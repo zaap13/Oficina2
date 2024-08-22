@@ -1,7 +1,9 @@
 import Workshop from "../models/workshopModel.js";
 
-async function criarWorkshop(titulo, descricao, data) {
-  const workshop = new Workshop({ titulo, descricao, data });
+async function criarWorkshop({ titulo, descricao, data, vagas }) {
+  console.log(titulo, descricao, data, vagas);
+
+  const workshop = new Workshop({ titulo, descricao, data, vagas });
   return await workshop.save();
 }
 
@@ -13,4 +15,18 @@ async function listarWorkshops() {
   return await Workshop.find();
 }
 
-export { criarWorkshop, buscarWorkshopPorId, listarWorkshops };
+async function atualizarWorkshopPorId(id, dadosAtualizados) {
+  return await Workshop.findByIdAndUpdate(id, dadosAtualizados, { new: true });
+}
+
+async function removerWorkshopPorId(id) {
+  return await Workshop.findByIdAndDelete(id);
+}
+
+export {
+  criarWorkshop,
+  buscarWorkshopPorId,
+  listarWorkshops,
+  atualizarWorkshopPorId,
+  removerWorkshopPorId,
+};

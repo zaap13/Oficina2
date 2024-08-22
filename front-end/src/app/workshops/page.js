@@ -40,14 +40,12 @@ const WorkshopsPage = () => {
   }, []);
 
   useEffect(() => {
-    // Filtrar workshops com base no termo de busca
     const filtered = workshops.filter(
       (workshop) =>
         workshop.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
         workshop.descricao.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Ordenar para mostrar workshops inscritos no topo
     const sortedWorkshops = filtered.sort((a, b) => {
       const isAInscrito = a.alunosInscritos.includes(state.userId);
       const isBInscrito = b.alunosInscritos.includes(state.userId);
@@ -57,8 +55,6 @@ const WorkshopsPage = () => {
       return 0;
     });
 
-    // Se o filtro "mostrar inscritos" estiver ativo, mostrar todos, com os inscritos no topo
-    // Se estiver inativo, mostrar apenas os não inscritos
     const results = sortedWorkshops.filter((workshop) => {
       return showInscritos || !workshop.alunosInscritos.includes(state.userId);
     });

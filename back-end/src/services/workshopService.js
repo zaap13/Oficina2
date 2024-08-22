@@ -2,10 +2,12 @@ import {
   criarWorkshop,
   buscarWorkshopPorId,
   listarWorkshops,
+  removerWorkshopPorId,
+  atualizarWorkshopPorId,
 } from "../repositories/workshopRepository.js";
 
-async function criarWorkshopService({ titulo, descricao, data }) {
-  return await criarWorkshop({ titulo, descricao, data });
+async function criarWorkshopService({ titulo, descricao, data, vagas }) {
+  return await criarWorkshop({ titulo, descricao, data, vagas });
 }
 
 async function buscarWorkshop(id) {
@@ -17,4 +19,18 @@ async function listarTodosWorkshopsService() {
   return await listarWorkshops();
 }
 
-export { criarWorkshopService, buscarWorkshop, listarTodosWorkshopsService };
+async function atualizarWorkshop(id, dadosAtualizados) {
+  return await atualizarWorkshopPorId(id, dadosAtualizados);
+}
+
+async function removerWorkshop(id) {
+  return await removerWorkshopPorId(id);
+}
+
+export {
+  criarWorkshopService,
+  buscarWorkshop,
+  listarTodosWorkshopsService,
+  atualizarWorkshop,
+  removerWorkshop,
+};

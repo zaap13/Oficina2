@@ -1,14 +1,16 @@
 import {
+  atualizarWorkshop,
   buscarWorkshop,
   criarWorkshopService,
   listarTodosWorkshopsService,
+  removerWorkshop,
 } from "../services/workshopService.js";
 
 async function criarNovoWorkshop(req, res) {
   try {
-    const { titulo, descricao, data } = req.body;
-    const workshop = await criarWorkshopService({ titulo, descricao, data });
-    res.status(201).json({ mensagem: "Workshop criado com sucesso", workshop });
+    const { titulo, descricao, data, vagas } = req.body;
+    const novoWorkshop = await criarWorkshopService({ titulo, descricao, data, vagas });
+    res.status(201).json({ mensagem: "Workshop criado com sucesso", workshop: novoWorkshop });
   } catch (error) {
     res.status(400).json({ mensagem: error.message });
   }
@@ -36,4 +38,39 @@ async function buscarWorkshopPorId(req, res) {
   }
 }
 
-export { criarNovoWorkshop, listarTodosWorkshops, buscarWorkshopPorId };
+async function editarWorkshop(req, res) {
+  try {
+    const { workshopId } = req.params;
+    const { titulo, descricao, data, vagas } = req.body;
+    const workshopAtualizado = await atualizarWorkshop(workshopId, {
+      titulo,
+      descricao,
+      data,
+      vagas,
+    });
+    res.status(200).json({
+      mensagem: "Workshop atualizado com sucesso",
+      workshopAtualizado,
+    });
+  } catch (error) {
+    res.status(400).json({ mensagem: error.message });
+  }
+}
+
+async function deletarWorkshop(req, res) {
+  try {
+    const { workshopId } = req.params;
+    await removerWorkshop(workshopId);
+    res.status(200).json({ mensagem: "Workshop deletado com sucesso" });
+  } catch (error) {
+    res.status(400).json({ mensagem: error.message });
+  }
+}
+
+export {
+  criarNovoWorkshop,
+  listarTodosWorkshops,
+  buscarWorkshopPorId,
+  editarWorkshop,
+  deletarWorkshop,
+};

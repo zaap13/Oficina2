@@ -2,6 +2,8 @@ import express from "express";
 import {
   buscarWorkshopPorId,
   criarNovoWorkshop,
+  deletarWorkshop,
+  editarWorkshop,
   listarTodosWorkshops,
 } from "../controllers/workshopController.js";
 import {
@@ -19,6 +21,10 @@ const workshopRouter = express.Router();
 workshopRouter.get("/", listarTodosWorkshops);
 
 workshopRouter.post("/", verificarToken, verificarAdmin, criarNovoWorkshop);
+
+workshopRouter.put("/:workshopId", verificarToken, verificarAdmin, editarWorkshop);
+
+workshopRouter.delete("/:workshopId", verificarToken, verificarAdmin, deletarWorkshop);
 
 workshopRouter.post("/:workshopId/inscrever", verificarToken, inscreverAluno);
 
