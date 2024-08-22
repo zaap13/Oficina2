@@ -11,14 +11,14 @@ function verificarToken(req, res, next) {
       .json({ mensagem: "Token não fornecido ou inválido" });
   }
 
-  const token = authorizationHeader.split(" ")[1]; // Extrai apenas o token JWT
+  const token = authorizationHeader.split(" ")[1];
 
   jwt.verify(token, chaveSecreta, (err, decoded) => {
     if (err) {
       return res.status(403).json({ mensagem: "Token inválido" });
     }
 
-    req.usuario = decoded; // Anexa o usuário decodificado ao request
+    req.usuario = decoded;
     next();
   });
 }

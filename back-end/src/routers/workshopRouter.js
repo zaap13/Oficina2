@@ -5,10 +5,14 @@ import {
   listarTodosWorkshops,
 } from "../controllers/workshopController.js";
 import {
+  desinscreverAluno,
   inscreverAluno,
   listarAlunosPorWorkshopId,
 } from "../controllers/alunoworkshopController.js";
-import { verificarAdmin, verificarToken } from "../middlewares/authMiddleware.js";
+import {
+  verificarAdmin,
+  verificarToken,
+} from "../middlewares/authMiddleware.js";
 
 const workshopRouter = express.Router();
 
@@ -18,7 +22,17 @@ workshopRouter.post("/", verificarToken, verificarAdmin, criarNovoWorkshop);
 
 workshopRouter.post("/:workshopId/inscrever", verificarToken, inscreverAluno);
 
-workshopRouter.get("/:workshopId/alunos", verificarToken, listarAlunosPorWorkshopId);
+workshopRouter.post(
+  "/:workshopId/desinscrever",
+  verificarToken,
+  desinscreverAluno
+);
+
+workshopRouter.get(
+  "/:workshopId/alunos",
+  verificarToken,
+  listarAlunosPorWorkshopId
+);
 
 workshopRouter.get("/:id", verificarToken, buscarWorkshopPorId);
 

@@ -17,14 +17,13 @@ async function realizarLogin({ email, senha }) {
     throw new Error("Credenciais inválidas");
   }
 
-  // Incluindo o ID e o tipo de usuário no objeto assinado pelo JWT
   const payload = {
-    id: usuario._id.toString(), // Convertendo o ObjectId para string
+    id: usuario._id.toString(),
     email: usuario.email,
-    tipo: usuario.tipo, // Supondo que 'tipo' seja o campo que define o tipo de usuário
+    tipo: usuario.tipo,
   };
 
-  console.log("Payload JWT:", payload); // Log para depuração
+  console.log("Payload JWT:", payload);
 
   const token = jwt.sign(payload, chaveSecreta);
 

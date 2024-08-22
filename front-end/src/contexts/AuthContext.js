@@ -5,7 +5,7 @@ import { getDecodedToken } from "@/helpers/authHelper";
 const initialState = {
   isAuthenticated: false,
   userType: null,
-  userId: null, // Incluímos userId no estado inicial
+  userId: null,
 };
 
 const AuthActionTypes = {
@@ -34,8 +34,8 @@ export const AuthProvider = ({ children }) => {
     const decodedToken = getDecodedToken();
     if (decodedToken) {
       const userType = decodedToken.tipo;
-      const userId = decodedToken.id; // Usamos o ID incluído no token
-      console.log("UserId from Token:", userId); // Adicione este log para depuração
+      const userId = decodedToken.id;
+      console.log("UserId from Token:", userId);
       dispatch({ type: AuthActionTypes.LOGIN, payload: { userType, userId } });
     }
   }, []);

@@ -7,7 +7,6 @@ async function seedUsersAndWorkshops() {
   try {
     await conectarBanco();
 
-    // Seed para usuários
     const adminExiste = await Usuario.findOne({ email: "admin@admin.admin" });
     if (adminExiste) {
       console.log("Usuário admin já existe no banco de dados.");
@@ -36,7 +35,6 @@ async function seedUsersAndWorkshops() {
       console.log("Usuário aluno criado com sucesso.");
     }
 
-    // Seed para workshops
     const workshopsExistentes = await Workshop.find();
     if (workshopsExistentes.length > 0) {
       console.log("Workshops já existem no banco de dados.");

@@ -32,7 +32,7 @@ const inscreverEmWorkshop = async (workshopId) => {
   try {
     const token = getTokenFromLocalStorage();
     const response = await apiService.post(
-      `/workshops/${workshopId}/inscrever`, 
+      `/workshops/${workshopId}/inscrever`,
       {},
       {
         headers: {
@@ -46,4 +46,27 @@ const inscreverEmWorkshop = async (workshopId) => {
   }
 };
 
-export { listarWorkshops, buscarWorkshop, inscreverEmWorkshop };
+const desinscreverDoWorkshop = async (workshopId) => {
+  try {
+    const token = getTokenFromLocalStorage();
+    const response = await apiService.post(
+      `/workshops/${workshopId}/desinscrever`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export {
+  listarWorkshops,
+  buscarWorkshop,
+  inscreverEmWorkshop,
+  desinscreverDoWorkshop,
+};

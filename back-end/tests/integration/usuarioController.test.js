@@ -10,20 +10,17 @@ beforeAll(async () => {
 });
 
 afterEach(async () => {
-  // Limpa o usuário criado no teste após cada teste
   await Usuario.deleteOne({ email: "novo@example.com" });
 });
 
 describe("Testes do controlador de usuários", () => {
   it("Deve criar um novo usuário", async () => {
-    // Realiza o login para obter o token
     const loginResponse = await request(app)
       .post("/login")
       .send({ email: "admin@admin.admin", senha: "admin" });
 
     const token = loginResponse.body.token;
 
-    // Usa o token para criar um novo usuário
     const response = await request(app)
       .post("/usuarios")
       .set("Authorization", `Bearer ${token}`)
