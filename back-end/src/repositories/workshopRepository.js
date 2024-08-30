@@ -23,10 +23,19 @@ async function removerWorkshopPorId(id) {
   return await Workshop.findByIdAndDelete(id);
 }
 
+async function marcarCertificadoComoAssinado(id, assinatura) {
+  return await Workshop.findByIdAndUpdate(
+    id,
+    { certificadoAssinado: true, assinaturaProfessor: assinatura },
+    { new: true }
+  );
+}
+
 export {
   criarWorkshop,
   buscarWorkshopPorId,
   listarWorkshops,
   atualizarWorkshopPorId,
   removerWorkshopPorId,
+  marcarCertificadoComoAssinado,
 };

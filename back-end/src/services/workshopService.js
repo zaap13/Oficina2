@@ -27,10 +27,15 @@ async function removerWorkshop(id) {
   return await removerWorkshopPorId(id);
 }
 
+async function assinarCertificado(id, assinatura) {
+  return await marcarCertificadoComoAssinado(id, assinatura);
+}
+
 export {
   criarWorkshopService,
   buscarWorkshop,
   listarTodosWorkshopsService,
   atualizarWorkshop,
   removerWorkshop,
+  assinarCertificado,
 };

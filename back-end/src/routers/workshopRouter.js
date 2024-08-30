@@ -5,6 +5,8 @@ import {
   deletarWorkshop,
   editarWorkshop,
   listarTodosWorkshops,
+  assinarWorkshop,
+  gerarCertificado,
 } from "../controllers/workshopController.js";
 import {
   desinscreverAluno,
@@ -41,5 +43,18 @@ workshopRouter.get(
 );
 
 workshopRouter.get("/:id", verificarToken, buscarWorkshopPorId);
+
+workshopRouter.post(
+  "/:workshopId/assinar",
+  verificarToken,
+  verificarAdmin,
+  assinarWorkshop
+);
+
+workshopRouter.post(
+  "/:workshopId/certificado",
+  verificarToken,
+  gerarCertificado
+);
 
 export default workshopRouter;

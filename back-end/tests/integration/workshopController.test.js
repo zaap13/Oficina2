@@ -41,4 +41,22 @@ describe('Workshop Controller', () => {
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty('mensagem', 'Workshop sem vagas disponíveis');
   });
+
+  it('Deve assinar um certificado', async () => {
+    const workshop = await factory.create('Workshop');
+    const aluno = await factory.create('Usuario');
+    const certificado = await factory.create('Certificado', { workshopId: workshop._id, alunoId: aluno._id });
+
+    const response = await request(app)
+      .post(`/certificados/${workshop._id}/${aluno._id}/assinar`)
+      .set('Authorization', `Bearer ${professorToken}`)
+      .expect(200);
+
+    expect(response.body).toHaveProperty('mensagem', 'Certificado assinado com sucesso');
+    expect(response.body.certificado).toHaveProperty('assinado', true);
+
+    const certificadoAtualizado = await Certificado.findById(certificado._id);
+    expect(certificadoAtualizado.assinado).toBe(true);
+    expect(certificadoAtualizado.professor.toString()).toBe('professor-id');
+  });
 });
