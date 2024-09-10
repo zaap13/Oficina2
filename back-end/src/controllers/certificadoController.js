@@ -1,12 +1,14 @@
 import Workshop from "../models/workshopModel.js";
 import Usuario from "../models/usuarioModel.js";
 import Certificado from "../models/certificadoModel.js";
+import fs from "fs";
 
 import {
   assinarCertificadoService,
   listarCertificadosAlunoService,
   gerarCertificadoService,
 } from "../services/certificadoService.js";
+import { gerarCertificadoPDF } from "../services/pdfService.js";
 
 async function listarCertificadosPorAluno(req, res) {
   try {
@@ -59,10 +61,10 @@ async function assinarCertificadoWorkshop(req, res) {
 async function baixarCertificado(req, res) {
   try {
     const { certificadoId } = req.params;
-    const certificado = await Certificado.findById(certificadoId)
-      .populate("workshop")
-      .populate("aluno")
-      .populate("professorAssinante");
+
+    const certificado = await Certificado.findById(certificadoId).populate(
+      "workshop aluno professorAssinante"
+    );
 
     if (!certificado) {
       return res.status(404).json({ mensagem: "Certificado não encontrado" });
@@ -74,16 +76,24 @@ async function baixarCertificado(req, res) {
       certificado.professorAssinante
     );
 
-    res.status(200).sendFile(caminhoArquivo, (err) => {
+    res.download(caminhoArquivo, (err) => {
       if (err) {
-        res.status(500).json({ mensagem: "Erro ao enviar o arquivo" });
+        console.error("Erro ao enviar o arquivo:", err);
+        return res.status(500).json({ mensagem: "Erro ao enviar o arquivo" });
       }
+
+      // Após o envio bem-sucedido do arquivo, removê-lo do sistema.
       fs.unlink(caminhoArquivo, (err) => {
-        if (err) console.error("Erro ao remover o arquivo:", err);
+        if (err) {
+          console.error("Erro ao remover o arquivo:", err);
+        } else {
+          console.log(`Arquivo ${caminhoArquivo} removido com sucesso.`);
+        }
       });
     });
   } catch (error) {
-    res.status(500).json({ mensagem: error.message });
+    console.error("Erro ao baixar o certificado:", error);
+    return res.status(500).json({ mensagem: "Erro ao baixar o certificado" });
   }
 }
 

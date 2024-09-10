@@ -46,8 +46,6 @@ async function listarAlunosPorWorkshop(workshopId) {
     model: "Usuario",
   });
 
-  console.log(workshop.alunosInscritos);
-
   return workshop.alunosInscritos;
 }
 

@@ -9,6 +9,7 @@ import { listarCertificadosUsuario } from "@/services/workshopService";
 const MeusCertificadosPage = () => {
   const [certificados, setCertificados] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingCertificadoId, setLoadingCertificadoId] = useState(null); // Estado para controlar o carregamento por certificado
 
   useEffect(() => {
     const fetchCertificados = async () => {
@@ -36,6 +37,7 @@ const MeusCertificadosPage = () => {
   }, []);
 
   const handleDownload = async (certificadoId) => {
+    setLoadingCertificadoId(certificadoId); // Define o certificado que está sendo baixado
     try {
       const token = localStorage.getItem("token"); // Obtendo o token do localStorage
       if (!token) {
@@ -77,6 +79,8 @@ const MeusCertificadosPage = () => {
         title: "Erro",
         text: "Não foi possível baixar o certificado. Tente novamente.",
       });
+    } finally {
+      setLoadingCertificadoId(null);
     }
   };
 
@@ -116,8 +120,9 @@ const MeusCertificadosPage = () => {
               </p>
               <Button
                 className="mt-4 bg-green-500 hover:bg-green-600 text-white"
+                isLoading={loadingCertificadoId === certificado._id}
                 onClick={() => handleDownload(certificado._id)}>
-                Download PDF
+                {loadingCertificadoId === certificado._id ? "Baixando..." : "Download PDF"}
               </Button>
             </div>
           ))}

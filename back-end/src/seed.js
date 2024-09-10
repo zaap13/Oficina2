@@ -17,7 +17,7 @@ async function seedUsersAndWorkshops() {
         senha: hashedSenhaAdmin,
         tipo: "admin",
         email: "admin@admin.admin",
-        assinatura: "https://via.placeholder.com/150x50?text=Assinatura",
+        assinatura: "https://dummyimage.com/150x50/000/fff&text=Assinatura",
       });
       console.log("Usuário admin criado com sucesso.");
     }
