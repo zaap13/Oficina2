@@ -40,6 +40,8 @@ async function seedUsersAndWorkshops() {
     if (workshopsExistentes.length > 0) {
       console.log("Workshops já existem no banco de dados.");
     } else {
+      const aluno = await Usuario.findOne({ email: "aluno@aluno.aluno" });
+
       const workshops = [
         {
           titulo: "Workshop de JavaScript",
@@ -65,7 +67,11 @@ async function seedUsersAndWorkshops() {
           data: new Date("2024-08-01"),
           vagas: 30,
           alunosInscritos: [
-            (await Usuario.findOne({ email: "aluno@aluno.aluno" }))._id,
+            {
+              aluno: aluno._id,
+              certificadoGerado: false,
+              marcadoFalta: false,
+            },
           ],
         },
       ];

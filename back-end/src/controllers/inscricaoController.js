@@ -2,6 +2,7 @@ import {
   inscreverAlunoNoWorkshop,
   desinscreverAlunoNoWorkshop,
   listarAlunosPorWorkshopService,
+  marcarFaltaService,
 } from "../services/inscricaoService.js";
 
 async function inscreverAluno(req, res) {
@@ -38,4 +39,14 @@ async function listarAlunosPorWorkshopId(req, res) {
   }
 }
 
-export { inscreverAluno, desinscreverAluno, listarAlunosPorWorkshopId };
+async function marcarFalta(req, res) {
+  try {
+    const { workshopId, alunoId } = req.params;
+    await marcarFaltaService(workshopId, alunoId);
+    res.status(200).json({ mensagem: "Falta marcada com sucesso" });
+  } catch (error) {
+    res.status(500).json({ mensagem: error.message });
+  }
+}
+
+export { inscreverAluno, desinscreverAluno, listarAlunosPorWorkshopId, marcarFalta };

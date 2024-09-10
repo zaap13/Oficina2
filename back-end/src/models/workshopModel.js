@@ -19,8 +19,18 @@ const workshopSchema = new mongoose.Schema({
   },
   alunosInscritos: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Usuario",
+      aluno: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Usuario",
+      },
+      certificadoGerado: {
+        type: Boolean,
+        default: false,
+      },
+      marcadoFalta: {
+        type: Boolean,
+        default: false,
+      },
     },
   ],
 });

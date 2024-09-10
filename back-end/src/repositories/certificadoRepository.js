@@ -6,7 +6,10 @@ async function salvarCertificado(workshopId, alunoId) {
 }
 
 async function buscarCertificadosPorAluno(alunoId) {
-  return await Certificado.find({ aluno: alunoId }).populate("workshop");
+  const certificados = await Certificado.find({ aluno: alunoId }).populate(
+    "workshop"
+  );
+  return certificados || [];
 }
 
 export { salvarCertificado, buscarCertificadosPorAluno };

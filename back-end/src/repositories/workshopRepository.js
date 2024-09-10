@@ -1,8 +1,6 @@
 import Workshop from "../models/workshopModel.js";
 
 async function criarWorkshop({ titulo, descricao, data, vagas }) {
-  console.log(titulo, descricao, data, vagas);
-
   const workshop = new Workshop({ titulo, descricao, data, vagas });
   return await workshop.save();
 }
@@ -12,7 +10,8 @@ async function buscarWorkshopPorId(id) {
 }
 
 async function listarWorkshops() {
-  return await Workshop.find();
+  const hoje = new Date();
+  return await Workshop.find({ data: { $gte: hoje } });
 }
 
 async function atualizarWorkshopPorId(id, dadosAtualizados) {
@@ -31,6 +30,11 @@ async function marcarCertificadoComoAssinado(id, assinatura) {
   );
 }
 
+async function listarWorkshopsPassadosRepository() {
+  const hoje = new Date();
+  return await Workshop.find({ data: { $lt: hoje } });
+}
+
 export {
   criarWorkshop,
   buscarWorkshopPorId,
@@ -38,4 +42,5 @@ export {
   atualizarWorkshopPorId,
   removerWorkshopPorId,
   marcarCertificadoComoAssinado,
+  listarWorkshopsPassadosRepository,
 };

@@ -110,6 +110,100 @@ const deletarWorkshop = async (workshopId) => {
   }
 };
 
+const listarWorkshopsPassados = async () => {
+  try {
+    const token = getTokenFromLocalStorage();
+    const response = await apiService.get("/certificado/workshops-passados", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Função para listar alunos por workshop
+const listarAlunosPorWorkshop = async (workshopId) => {
+  try {
+    const token = getTokenFromLocalStorage();
+    const response = await apiService.get(`/workshops/${workshopId}/alunos`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const gerarCertificado = async (workshopId, alunoId) => {
+  try {
+    const token = getTokenFromLocalStorage();
+    const response = await apiService.post(
+      `/certificado/assinar/${workshopId}`,
+      { alunoId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const marcarFalta = async (workshopId, alunoId) => {
+  try {
+    const token = getTokenFromLocalStorage();
+    const response = await apiService.post(
+      `/workshops/${workshopId}/alunos/${alunoId}/marcar-falta`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const listarCertificadosUsuario = async () => {
+  try {
+    const token = getTokenFromLocalStorage();
+    const response = await apiService.get("/certificado/aluno", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const baixarCertificado = async (certificadoId) => {
+  const token = getTokenFromLocalStorage();
+  const response = await apiService.get(
+    `/certificado/baixar/${certificadoId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      responseType: "blob", // Isso é importante para lidar com o PDF
+    }
+  );
+
+  return response;
+};
+
 export {
   listarWorkshops,
   buscarWorkshop,
@@ -118,4 +212,10 @@ export {
   criarWorkshop,
   editarWorkshop,
   deletarWorkshop,
+  listarWorkshopsPassados,
+  listarAlunosPorWorkshop,
+  gerarCertificado,
+  marcarFalta,
+  listarCertificadosUsuario,
+  baixarCertificado,
 };

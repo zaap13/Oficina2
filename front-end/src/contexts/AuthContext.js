@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }) => {
     if (decodedToken) {
       const userType = decodedToken.tipo;
       const userId = decodedToken.id;
-      console.log("UserId from Token:", userId);
       dispatch({ type: AuthActionTypes.LOGIN, payload: { userType, userId } });
     }
   }, []);

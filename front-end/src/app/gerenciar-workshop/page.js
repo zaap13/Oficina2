@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import {
   listarWorkshops,
+  listarWorkshopsPassados,
   criarWorkshop,
   editarWorkshop,
   deletarWorkshop,
@@ -11,9 +12,11 @@ import Button from "@/components/Button";
 import Loading from "@/components/Loading";
 import Modal from "@/components/Modal";
 import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 const AdminWorkshopsPage = () => {
-  const [workshops, setWorkshops] = useState([]);
+  const [workshopsAtuais, setWorkshopsAtuais] = useState([]);
+  const [workshopsPassados, setWorkshopsPassados] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedWorkshop, setSelectedWorkshop] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,13 +26,18 @@ const AdminWorkshopsPage = () => {
     data: "",
     vagas: "",
   });
+  const router = useRouter();
 
   useEffect(() => {
     const fetchWorkshops = async () => {
       try {
         setIsLoading(true);
-        const data = await listarWorkshops();
-        setWorkshops(data);
+        const [atuais, passados] = await Promise.all([
+          listarWorkshops(),
+          listarWorkshopsPassados(),
+        ]);
+        setWorkshopsAtuais(atuais);
+        setWorkshopsPassados(passados);
         setIsLoading(false);
       } catch (error) {
         console.error("Erro ao listar workshops:", error);
@@ -43,7 +51,7 @@ const AdminWorkshopsPage = () => {
   const handleCreateWorkshop = async () => {
     try {
       const newWorkshop = await criarWorkshop(formState);
-      setWorkshops([...workshops, newWorkshop]);
+      setWorkshopsAtuais([...workshopsAtuais, newWorkshop]);
       Swal.fire({
         icon: "success",
         title: "Workshop criado com sucesso",
@@ -59,13 +67,17 @@ const AdminWorkshopsPage = () => {
     }
   };
 
+  const handleGenerateCertificate = (workshopId) => {
+    router.push(`/gerenciar-workshop/${workshopId}`);
+  };
+
   const handleEditWorkshop = async () => {
     try {
       const updatedWorkshop = await editarWorkshop(
         selectedWorkshop._id,
         formState
       );
-      setWorkshops((prevWorkshops) =>
+      setWorkshopsAtuais((prevWorkshops) =>
         prevWorkshops.map((workshop) =>
           workshop._id === selectedWorkshop._id ? updatedWorkshop : workshop
         )
@@ -100,8 +112,8 @@ const AdminWorkshopsPage = () => {
     if (resultado.isConfirmed) {
       try {
         await deletarWorkshop(workshopId);
-        setWorkshops(
-          workshops.filter((workshop) => workshop._id !== workshopId)
+        setWorkshopsAtuais(
+          workshopsAtuais.filter((workshop) => workshop._id !== workshopId)
         );
         Swal.fire({
           icon: "success",
@@ -164,38 +176,71 @@ const AdminWorkshopsPage = () => {
         </div>
       )}
 
-      {!isLoading && workshops.length > 0 && (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {workshops.map((workshop) => (
-            <div
-              key={workshop._id}
-              className="bg-gray-50 border border-gray-200 shadow-lg rounded-xl p-6">
-              <h2 className="text-2xl font-semibold text-orange-600">
-                {workshop.titulo}
-              </h2>
-              <p className="mt-2 text-gray-700">{workshop.descricao}</p>
-              <p className="mt-4 text-gray-600">
-                Data: {new Date(workshop.data).toLocaleDateString()}
-              </p>
-              <p className="mt-2 text-gray-600">
-                Vagas: {workshop.vagas} disponíveis
-              </p>
-              <div className="mt-4 flex justify-between">
+      {!isLoading && workshopsAtuais.length > 0 && (
+        <div>
+          <h2 className="text-3xl font-semibold text-blue-600 mb-6">
+            Workshops Atuais
+          </h2>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {workshopsAtuais.map((workshop) => (
+              <div
+                key={workshop._id}
+                className="bg-gray-50 border border-gray-200 shadow-lg rounded-xl p-6">
+                <h2 className="text-2xl font-semibold text-orange-600">
+                  {workshop.titulo}
+                </h2>
+                <p className="mt-2 text-gray-700">{workshop.descricao}</p>
+                <p className="mt-4 text-gray-600">
+                  Data: {new Date(workshop.data).toLocaleDateString()}
+                </p>
+                <p className="mt-2 text-gray-600">
+                  Vagas: {workshop.vagas} disponíveis
+                </p>
+                <div className="mt-4 flex justify-between">
+                  <Button
+                    className="bg-blue-500 hover:bg-blue-600 text-white"
+                    onClick={() => openModalForEdit(workshop)}
+                    type="button">
+                    Editar
+                  </Button>
+                  <Button
+                    className="bg-red-500 hover:bg-red-600 text-white"
+                    onClick={() => handleDeleteWorkshop(workshop._id)}
+                    type="button">
+                    Deletar
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {!isLoading && workshopsPassados.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-3xl font-semibold text-red-600 mb-6">
+            Workshops Passados
+          </h2>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {workshopsPassados.map((workshop) => (
+              <div
+                key={workshop._id}
+                className="bg-gray-50 border border-gray-200 shadow-lg rounded-xl p-6">
+                <h2 className="text-2xl font-semibold text-orange-600">
+                  {workshop.titulo}
+                </h2>
+                <p className="mt-2 text-gray-700">{workshop.descricao}</p>
+                <p className="mt-4 text-gray-600">
+                  Data: {new Date(workshop.data).toLocaleDateString()}
+                </p>
                 <Button
-                  className="bg-blue-500 hover:bg-blue-600 text-white"
-                  onClick={() => openModalForEdit(workshop)}
-                  type="button">
-                  Editar
-                </Button>
-                <Button
-                  className="bg-red-500 hover:bg-red-600 text-white"
-                  onClick={() => handleDeleteWorkshop(workshop._id)}
-                  type="button">
-                  Deletar
+                  className="bg-orange-500 hover:bg-orange-600 text-white"
+                  onClick={() => handleGenerateCertificate(workshop._id)}>
+                  Gerar certificado para alunos
                 </Button>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
 

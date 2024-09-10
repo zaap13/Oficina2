@@ -47,8 +47,12 @@ const WorkshopsPage = () => {
     );
 
     const sortedWorkshops = filtered.sort((a, b) => {
-      const isAInscrito = a.alunosInscritos.includes(state.userId);
-      const isBInscrito = b.alunosInscritos.includes(state.userId);
+      const isAInscrito = a.alunosInscritos.some(
+        (inscricao) => inscricao.aluno === state.userId
+      );
+      const isBInscrito = b.alunosInscritos.some(
+        (inscricao) => inscricao.aluno === state.userId
+      );
 
       if (isAInscrito && !isBInscrito) return -1;
       if (!isAInscrito && isBInscrito) return 1;
@@ -56,7 +60,12 @@ const WorkshopsPage = () => {
     });
 
     const results = sortedWorkshops.filter((workshop) => {
-      return showInscritos || !workshop.alunosInscritos.includes(state.userId);
+      return (
+        showInscritos ||
+        !workshop.alunosInscritos.some(
+          (inscricao) => inscricao.aluno === state.userId
+        )
+      );
     });
 
     setFilteredWorkshops(results);
@@ -82,7 +91,10 @@ const WorkshopsPage = () => {
 
       const updatedWorkshop = {
         ...selectedWorkshop,
-        alunosInscritos: [...selectedWorkshop.alunosInscritos, state.userId],
+        alunosInscritos: [
+          ...selectedWorkshop.alunosInscritos,
+          { aluno: state.userId },
+        ],
       };
       setSelectedWorkshop(updatedWorkshop);
       setWorkshops((prevWorkshops) =>
@@ -112,7 +124,7 @@ const WorkshopsPage = () => {
       const updatedWorkshop = {
         ...selectedWorkshop,
         alunosInscritos: selectedWorkshop.alunosInscritos.filter(
-          (id) => id !== state.userId
+          (inscricao) => inscricao.aluno !== state.userId
         ),
       };
       setSelectedWorkshop(updatedWorkshop);
@@ -181,7 +193,9 @@ const WorkshopsPage = () => {
                 Vagas: {workshop.vagas - workshop.alunosInscritos.length}{" "}
                 disponíveis
               </p>
-              {workshop.alunosInscritos.includes(state.userId) && (
+              {workshop.alunosInscritos.some(
+                (inscricao) => inscricao.aluno === state.userId
+              ) && (
                 <p className="text-green-500 font-bold mt-2">
                   Você está inscrito!
                 </p>
@@ -202,7 +216,9 @@ const WorkshopsPage = () => {
             {selectedWorkshop.vagas - selectedWorkshop.alunosInscritos.length}{" "}
             disponíveis
           </p>
-          {selectedWorkshop.alunosInscritos.includes(state.userId) ? (
+          {selectedWorkshop.alunosInscritos.some(
+            (inscricao) => inscricao.aluno === state.userId
+          ) ? (
             <Button
               className="mt-6 bg-red-500 hover:bg-red-600 text-white"
               isLoading={isLoading}

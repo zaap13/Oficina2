@@ -2,9 +2,9 @@ import PDFDocument from "pdfkit";
 import fs from "fs";
 import path from "path";
 
-async function gerarCertificadoPDF(workshop, aluno) {
+async function gerarCertificadoPDF(workshop, aluno, professor) {
   const doc = new PDFDocument();
-  const caminhoArquivo = path.join(__dirname, `certificado-${workshop._id}.pdf`);
+  const caminhoArquivo = path.join(__dirname, `certificado-${workshop._id}-${aluno._id}.pdf`);
   
   doc.pipe(fs.createWriteStream(caminhoArquivo));
   
@@ -17,9 +17,10 @@ async function gerarCertificadoPDF(workshop, aluno) {
   doc.text(`Descrição: ${workshop.descricao}`);
   doc.text(`Data: ${workshop.data.toDateString()}`);
   
-  if (workshop.assinaturaProfessor) {
+  if (professor.assinatura) {
     doc.moveDown();
-    doc.text(`Assinatura: ${workshop.assinaturaProfessor}`);
+    doc.image(professor.assinatura, { fit: [100, 50], align: 'center' });
+    doc.text(`Assinatura: ${professor.nome}`);
   }
 
   doc.end();

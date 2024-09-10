@@ -3,14 +3,23 @@ import {
   buscarWorkshop,
   criarWorkshopService,
   listarTodosWorkshopsService,
+  listarWorkshopsPassadosService,
   removerWorkshop,
 } from "../services/workshopService.js";
 
 async function criarNovoWorkshop(req, res) {
   try {
     const { titulo, descricao, data, vagas } = req.body;
-    const novoWorkshop = await criarWorkshopService({ titulo, descricao, data, vagas });
-    res.status(201).json({ mensagem: "Workshop criado com sucesso", workshop: novoWorkshop });
+    const novoWorkshop = await criarWorkshopService({
+      titulo,
+      descricao,
+      data,
+      vagas,
+    });
+    res.status(201).json({
+      mensagem: "Workshop criado com sucesso",
+      workshop: novoWorkshop,
+    });
   } catch (error) {
     res.status(400).json({ mensagem: error.message });
   }
@@ -42,8 +51,16 @@ async function editarWorkshop(req, res) {
   try {
     const { workshopId } = req.params;
     const { titulo, descricao, data, vagas } = req.body;
-    const workshopAtualizado = await atualizarWorkshop(workshopId, { titulo, descricao, data, vagas });
-    res.status(200).json({ mensagem: "Workshop atualizado com sucesso", workshopAtualizado });
+    const workshopAtualizado = await atualizarWorkshop(workshopId, {
+      titulo,
+      descricao,
+      data,
+      vagas,
+    });
+    res.status(200).json({
+      mensagem: "Workshop atualizado com sucesso",
+      workshopAtualizado,
+    });
   } catch (error) {
     res.status(400).json({ mensagem: error.message });
   }
@@ -59,4 +76,20 @@ async function deletarWorkshop(req, res) {
   }
 }
 
-export { criarNovoWorkshop, listarTodosWorkshops, buscarWorkshopPorId, editarWorkshop, deletarWorkshop };
+async function listarWorkshopsPassados(req, res) {
+  try {
+    const workshops = await listarWorkshopsPassadosService();
+    res.status(200).json(workshops);
+  } catch (error) {
+    res.status(500).json({ mensagem: "Erro ao listar workshops passados" });
+  }
+}
+
+export {
+  criarNovoWorkshop,
+  listarTodosWorkshops,
+  buscarWorkshopPorId,
+  editarWorkshop,
+  deletarWorkshop,
+  listarWorkshopsPassados,
+};
