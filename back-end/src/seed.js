@@ -17,6 +17,7 @@ async function seedUsersAndWorkshops() {
         senha: hashedSenhaAdmin,
         tipo: "admin",
         email: "admin@admin.admin",
+        assinatura: "https://via.placeholder.com/150x50?text=Assinatura",
       });
       console.log("Usuário admin criado com sucesso.");
     }
@@ -58,12 +59,20 @@ async function seedUsersAndWorkshops() {
           data: new Date("2024-11-01"),
           vagas: 25,
         },
+        {
+          titulo: "Workshop de MongoDB",
+          descricao: "Mestre o MongoDB e crie bases de dados escaláveis.",
+          data: new Date("2024-08-01"),
+          vagas: 30,
+          alunosInscritos: [
+            (await Usuario.findOne({ email: "aluno@aluno.aluno" }))._id,
+          ],
+        },
       ];
 
       await Workshop.insertMany(workshops);
       console.log("Workshops criados com sucesso.");
     }
-
   } catch (error) {
     console.error("Erro ao criar usuários e workshops:", error);
   }

@@ -23,14 +23,6 @@ const workshopSchema = new mongoose.Schema({
       ref: "Usuario",
     },
   ],
-  certificadoAssinado: {
-    type: Boolean,
-    default: false,
-  },
-  assinaturaProfessor: {
-    type: String,
-    default: null,
-  },
 });
 
 const Workshop = mongoose.model("Workshop", workshopSchema);

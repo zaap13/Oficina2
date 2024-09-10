@@ -1,21 +1,12 @@
 import {
   buscarInscricaoPorAlunoEWorkshop,
-  desinscreverAluno,
   inscreverAluno,
-} from "../repositories/inscricoesRepository.js";
+  desinscreverAluno,
+  listarAlunosPorWorkshop,
+} from "../repositories/inscricaoRepository.js";
 
 async function inscreverAlunoNoWorkshop({ alunoId, workshopId }) {
-  console.log(
-    "Tentativa de inscrição - Aluno ID:",
-    alunoId,
-    "Workshop ID:",
-    workshopId
-  );
-
-  const inscricaoExistente = await buscarInscricaoPorAlunoEWorkshop(
-    alunoId,
-    workshopId
-  );
+  const inscricaoExistente = await buscarInscricaoPorAlunoEWorkshop(alunoId, workshopId);
   if (inscricaoExistente) {
     throw new Error("Aluno já está inscrito neste workshop");
   }
@@ -23,16 +14,15 @@ async function inscreverAlunoNoWorkshop({ alunoId, workshopId }) {
 }
 
 async function desinscreverAlunoNoWorkshop({ alunoId, workshopId }) {
-  const inscricaoExistente = await buscarInscricaoPorAlunoEWorkshop(
-    alunoId,
-    workshopId
-  );
-
-  console.log(inscricaoExistente);
+  const inscricaoExistente = await buscarInscricaoPorAlunoEWorkshop(alunoId, workshopId);
   if (!inscricaoExistente) {
     throw new Error("Aluno não está inscrito neste workshop");
   }
   return await desinscreverAluno({ alunoId, workshopId });
 }
 
-export { inscreverAlunoNoWorkshop, desinscreverAlunoNoWorkshop };
+async function listarAlunosPorWorkshopService(workshopId) {
+  return await listarAlunosPorWorkshop(workshopId);
+}
+
+export { inscreverAlunoNoWorkshop, desinscreverAlunoNoWorkshop, listarAlunosPorWorkshopService };
